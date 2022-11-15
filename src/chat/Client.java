@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Client {
-	private static int clientCount = 1;
+	private static int clientCount = 0;
 	Socket chatSocket;
 	BufferedReader reader;
 	JTextField outgoing;
@@ -60,7 +60,7 @@ public class Client {
 			try {
 				System.out.println("Button Pressed");
 				PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());
-				writer.println("Client Message: " + outgoing.getText());
+				writer.println("Client " + clientCount + "'s Message: " + outgoing.getText());
 				writer.flush();
 			} catch (IOException ex) {
 				ex.printStackTrace();
