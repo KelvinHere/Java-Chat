@@ -32,12 +32,6 @@ public class Server{
 				
 				Thread t = new Thread(new ClientHandler(clientSocket));
 				t.run();
-				writer.println("Client connected on port :" + clientSocket.getPort());
-				writer.flush();
-				
-				InputStreamReader stream = new InputStreamReader(clientSocket.getInputStream());
-				BufferedReader br = new BufferedReader(stream);
-				System.out.println(br.readLine());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -64,9 +58,21 @@ public class Server{
 			try {
 				while ((message = reader.readLine()) != null) {
 					System.out.println("Recieved client message : " + message);
+					sendMessage(message);
 				}
 			} catch(Exception ex) {
 				ex.printStackTrace();
+			}
+		}
+		
+		public void sendMessage(String message) {
+			for (PrintWriter writer : clientOutputStreams) {
+				try {
+					writer.println(message);
+					writer.flush();
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}

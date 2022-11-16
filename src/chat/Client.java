@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class Client {
+	String clientName = "Bob";
 	Socket chatSocket;
 	BufferedReader reader;
 	JTextField outgoing;
@@ -58,11 +60,14 @@ public class Client {
 				String message;
 				while ((message = reader.readLine()) != null) {
 					System.out.println("Read :" + message);
+					messages.append(message + "\n");
 				}
+			}catch(SocketException socketEx) {
+				System.out.println("Connection Lost");
+				System.exit(0);
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
-			
 		}
 	}
 	
@@ -73,7 +78,7 @@ public class Client {
 			try {
 				System.out.println("Button Pressed");
 				PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());
-				writer.println("Clients' Message: " + outgoing.getText());
+				writer.println(clientName + ": " + outgoing.getText());
 				writer.flush();
 			} catch (IOException ex) {
 				ex.printStackTrace();
