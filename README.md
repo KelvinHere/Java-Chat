@@ -15,10 +15,10 @@ Java chat program
  ## Running
  
  * To run the server
- 	* Run Chat.Runner
+ 	* Chat.Runner (No args run the server with GUI, gives option to change port & see chat)
+ 	* Chat.Runner CommandLineServer (Runs server without gui and default 5000 port)
  	
  * To run the Client
- 	* Chat.Runner Client
  	* Chat.Runner Client Billy  (Arguments "Client" & "Name of Client")
  
  ## Technologies
