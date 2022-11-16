@@ -12,6 +12,15 @@ Java chat program
  * Client can send a message, all other clients receive this message
  * Server hosts all clients
  
+ ## Running
+ 
+ * To run the server
+ 	* Run Chat.Runner
+ 	
+ * To run the Client
+ 	* Chat.Runner Client
+ 	* Chat.Runner Client Billy  (Arguments "Client" & "Name of Client")
+ 
  ## Technologies
  
 - [Java](https://www.java.com/en/) - Language

@@ -18,6 +18,10 @@ public class Client {
 	JTextField outgoing;
 	JTextArea messages;
 
+	public Client(String name) {
+		this();
+		this.clientName = name;
+	}
 	
 	public Client() {
 		try {
@@ -59,7 +63,6 @@ public class Client {
 			try {
 				String message;
 				while ((message = reader.readLine()) != null) {
-					System.out.println("Read :" + message);
 					messages.append(message + "\n");
 				}
 			}catch(SocketException socketEx) {
