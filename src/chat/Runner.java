@@ -9,7 +9,6 @@ public class Runner {
 		} else {
 			System.out.println("Client started");
 			Client c1 = new Client();
-			c1.receive();
 		}
 	}
 }

@@ -11,14 +11,13 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Client {
-	private static int clientCount = 0;
 	Socket chatSocket;
 	BufferedReader reader;
 	JTextField outgoing;
+	JTextArea messages;
 
 	
 	public Client() {
-		clientCount ++;
 		try {
 			chatSocket = new Socket("127.0.0.1", 5000);
 			InputStreamReader stream = new InputStreamReader(chatSocket.getInputStream());
@@ -28,28 +27,42 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		Thread readerThread = new Thread(new IncomingReader());
+		readerThread.start();
+
 		SetupGui();
 	}
 	
+		
 	public void SetupGui() {
-		JFrame frame = new JFrame("ChatClient No:" + clientCount);
-		JPanel mainPanel = new JPanel();
+		JFrame frame = new JFrame("Chat Client");
+		JPanel mainPanel = new JPanel(new BorderLayout());
 		outgoing = new JTextField(50);
+		messages = new JTextArea(20,50);
 		JButton sendButton = new JButton("Send");
 		sendButton.addActionListener(new SendButtonListener());
-		mainPanel.add(outgoing);
-		mainPanel.add(sendButton);
+		mainPanel.add(BorderLayout.CENTER, outgoing);
+		mainPanel.add(BorderLayout.NORTH, messages);
+		mainPanel.add(BorderLayout.SOUTH, sendButton);
 		frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
-		frame.setSize(700,300);
+		frame.setSize(700,700);
 		frame.setVisible(true);
 	}
 	
 	
-	public void receive() {
-		try {
-			System.out.println("Recieved msg : " + reader.readLine());
-		} catch (IOException e) {
-			e.printStackTrace();
+	public class IncomingReader implements Runnable {
+		@Override
+		public void run() {
+			try {
+				String message;
+				while ((message = reader.readLine()) != null) {
+					System.out.println("Read :" + message);
+				}
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			
 		}
 	}
 	
@@ -60,11 +73,13 @@ public class Client {
 			try {
 				System.out.println("Button Pressed");
 				PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());
-				writer.println("Client " + clientCount + "'s Message: " + outgoing.getText());
+				writer.println("Clients' Message: " + outgoing.getText());
 				writer.flush();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
+			outgoing.setText("");
+			outgoing.requestFocus();
 		}
 	}
 }
