@@ -21,7 +21,7 @@ public class Client {
 	
 	public Client() {
 		try {
-			chatSocket = new Socket("127.0.0.1", 5000);
+			chatSocket = new Socket("127.0.0.1", 5005);
 			InputStreamReader stream = new InputStreamReader(chatSocket.getInputStream());
 			reader = new BufferedReader(stream);
 		} catch (UnknownHostException e) {

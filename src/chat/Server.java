@@ -14,7 +14,7 @@ public class Server{
 	
 	public Server() {
 		try {
-			serverSocket = new ServerSocket(5000);
+			serverSocket = new ServerSocket(5005);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -24,14 +24,15 @@ public class Server{
 		clientOutputStreams = new ArrayList<>();
 		try {
 			while (true) {
+				System.out.println("Waiting");
 				// Create anon socket for client to attach
 				Socket clientSocket = serverSocket.accept();
-				System.out.println("Client assigned port :" + clientSocket.getPort());
+				System.out.println("Client connected");
 				PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 				clientOutputStreams.add(writer);
 				
 				Thread t = new Thread(new ClientHandler(clientSocket));
-				t.run();
+				t.start();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -59,6 +60,7 @@ public class Server{
 				while ((message = reader.readLine()) != null) {
 					System.out.println("Recieved client message : " + message);
 					sendMessage(message);
+					Thread.sleep(250);
 				}
 			} catch(Exception ex) {
 				ex.printStackTrace();
