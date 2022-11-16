@@ -12,20 +12,17 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Client {
-	String clientName = "Bob";
+	String clientName;
 	Socket chatSocket;
 	BufferedReader reader;
 	JTextField outgoing;
 	JTextArea messages;
 
-	public Client(String name) {
-		this();
-		this.clientName = name;
-	}
 	
-	public Client() {
+	public Client(String name) {
+		this.clientName = name;
 		try {
-			chatSocket = new Socket("127.0.0.1", 5005);
+			chatSocket = new Socket("127.0.0.1", 5000);
 			InputStreamReader stream = new InputStreamReader(chatSocket.getInputStream());
 			reader = new BufferedReader(stream);
 		} catch (UnknownHostException e) {
@@ -37,12 +34,14 @@ public class Client {
 		Thread readerThread = new Thread(new IncomingReader());
 		readerThread.start();
 
-		SetupGui();
+		setupGui();
 	}
 	
 		
-	public void SetupGui() {
+	public void setupGui() {
 		JFrame frame = new JFrame("Chat Client");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		outgoing = new JTextField(50);
 		messages = new JTextArea(20,50);
@@ -79,9 +78,9 @@ public class Client {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				System.out.println("Button Pressed");
 				PrintWriter writer = new PrintWriter(chatSocket.getOutputStream());
-				writer.println(clientName + ": " + outgoing.getText());
+				String message = clientName + ": " + outgoing.getText();
+				writer.println(message);
 				writer.flush();
 			} catch (IOException ex) {
 				ex.printStackTrace();
